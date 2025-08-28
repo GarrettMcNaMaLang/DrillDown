@@ -14,16 +14,36 @@ public class FallDisruptor : MonoBehaviour
 
     public DisruptorType disruptorType;
 
-    bool upTop;
-    // Start is called before the first frame update
-    void Start()
-    {
+    private bool upTop, inControl;
 
+    void OnEnable()
+    {
+        
     }
 
+    void OnDisable()
+    {
+        
+    }
+
+    void Awake()
+    {
+        
+    }
+    
     // Update is called once per frame
     void Update()
     {
 
+    }
+
+    bool ParachuteMode()
+    {
+        return false;
+    }
+
+    bool BoosterMode()
+    {
+        return false;
     }
 }
