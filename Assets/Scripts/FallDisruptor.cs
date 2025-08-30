@@ -15,8 +15,8 @@ public class FallDisruptor : MonoBehaviour
     public DisruptorType disruptorType;
 
     public bool upTop, inControl;
-    
 
+    SpriteRenderer matt;
     void OnEnable()
     {
         
@@ -29,40 +29,47 @@ public class FallDisruptor : MonoBehaviour
 
     void Awake()
     {
-        
+        matt = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (disruptorType == DisruptorType.Parachute && Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            ParachuteMode();
-        }
-
-        if (disruptorType == DisruptorType.Booster && Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            BoosterMode();
-        }
-
-        if (disruptorType == DisruptorType.Booster && Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            BoosterMode();
-        }
         
-         if (disruptorType == DisruptorType.Booster && Input.GetKeyDown(KeyCode.RightArrow))
+        
+        if (inControl)
         {
-            BoosterMode();
+            Debug.Log("In Control");
+            matt.color = Color.red;
+            if (disruptorType == DisruptorType.Parachute)
+            {
+                ParachuteMode();
+            }
+
+            if (disruptorType == DisruptorType.Booster)
+            {
+                BoosterMode();
+            }
         }
+        else
+        {
+
+            matt.color = Color.white;
+        }
+
+       
+        
     }
 
     bool ParachuteMode()
     {
+        Debug.Log("Parachute Mode");
         return false;
     }
 
     bool BoosterMode()
     {
+        Debug.Log("Booster Mode");
         return false;
     }
 }

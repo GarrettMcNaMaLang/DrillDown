@@ -2,15 +2,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 
 public class BlockScript : MonoBehaviour
 {
 
+    public float weight = 40.0f;
     public GameObject blockObject;
 
     bool left, right, grounded;
+
+    public Rigidbody2D rb;
 
     [SerializeField]
     public List<FallDisruptor> TopDisruptors = new List<FallDisruptor>();
@@ -21,16 +25,12 @@ public class BlockScript : MonoBehaviour
     [SerializeField]
     public List<FallDisruptor> BottomDisruptors = new List<FallDisruptor>();
 
+    List<FallDisruptor> CurrDisruptors = null;
 
-    public enum CurrDisruptors
+    void Awake()
     {
-        Up,
-        Down,
-        Left,
-        Right
+        rb = GetComponent<Rigidbody2D>();
     }
-
-    public CurrDisruptors currDisruptors;
 
 
     void RotateBlock(float value)
@@ -46,6 +46,8 @@ public class BlockScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SendCommand(TopDisruptors);
+
 
     }
 
@@ -55,6 +57,11 @@ public class BlockScript : MonoBehaviour
 
         if (grounded)
             StationaryMode();
+
+        if (Input.GetKeyDown(KeyCode.Space) && CurrDisruptors != null)
+        {
+            ActivateDisruptors(CurrDisruptors);
+        }
 
         if (Input.GetKeyDown(KeyCode.A))
         {
@@ -91,6 +98,11 @@ public class BlockScript : MonoBehaviour
         }
     }
 
+    void FixedUpdate()
+    {
+
+    }
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Platform"))
@@ -108,15 +120,38 @@ public class BlockScript : MonoBehaviour
 
     void SendCommand(List<FallDisruptor> TurnOn)
     {
+        if (CurrDisruptors == null)
+            CurrDisruptors = TurnOn;
+
+        Debug.Log("Changing Block");
         foreach (FallDisruptor dis in TurnOn)
         {
+
             dis.inControl = true;
+        }
+        TurnOff(CurrDisruptors);
+
+        CurrDisruptors = TurnOn;
+    }
+
+    void TurnOff(List<FallDisruptor> turnOff)
+    {
+        if (turnOff == null)
+            Debug.Log("Empty List");
+
+        foreach (FallDisruptor dis in turnOff)
+        {
+            Debug.Log("Turning Off Block");
+            dis.inControl = false;
         }
     }
 
-    void TurnOff(CurrDisruptors TurnOff)
+    void ActivateDisruptors(List<FallDisruptor> Activate)
     {
-
+        foreach (FallDisruptor active in Activate)
+        {
+            
+        }
     }
 
     //functions to turn on and off each Disruptor List
