@@ -1,13 +1,25 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using JetBrains.Annotations;
+using Unity.Collections;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 
 public class BlockScript : MonoBehaviour
 {
+
+    public enum CurrSideMode
+    {
+        Null,
+        ParachuteMode,
+        BoosterMode
+    }
+
+    //[HideInInspector]
+    public CurrSideMode currsideMode;
 
     public float weight = 40.0f;
     public GameObject blockObject;
@@ -48,7 +60,7 @@ public class BlockScript : MonoBehaviour
     {
         SendCommand(TopDisruptors);
 
-
+        currsideMode = CurrSideMode.Null;
     }
 
     // Update is called once per frame
@@ -148,9 +160,78 @@ public class BlockScript : MonoBehaviour
 
     void ActivateDisruptors(List<FallDisruptor> Activate)
     {
+
+
+        CurrSideMode side = currsideMode;
+
+        if (side == CurrSideMode.Null)
+            currsideMode = CurrSideMode.BoosterMode;
+
         foreach (FallDisruptor active in Activate)
         {
-            
+            if (currsideMode == CurrSideMode.BoosterMode && active.disruptorType == FallDisruptor.DisruptorType.Parachute)
+            {
+                active.BoosterActive = false;
+                active.ParachuteActive = true;
+                
+                active.ParachuteMode();
+                currsideMode = CurrSideMode.ParachuteMode;
+                return;
+
+            }
+
+            if (currsideMode == CurrSideMode.ParachuteMode && active.disruptorType == FallDisruptor.DisruptorType.Booster)
+            {
+                active.ParachuteActive = false;
+                active.BoosterActive = true;
+
+                active.BoosterMode();
+                currsideMode = CurrSideMode.BoosterMode;
+                return;
+            }
+        }
+
+    }
+
+    void ActivateBooster(List<FallDisruptor> Activate)
+    {
+         foreach (FallDisruptor active in Activate)
+        {
+            if (currsideMode == CurrSideMode.BoosterMode && active.disruptorType == FallDisruptor.DisruptorType.Parachute)
+            {
+                active.ParachuteMode();
+                currsideMode = CurrSideMode.ParachuteMode;
+                return;
+
+            }
+
+            if (currsideMode == CurrSideMode.ParachuteMode && active.disruptorType == FallDisruptor.DisruptorType.Booster)
+            {
+                active.BoosterMode();
+                currsideMode = CurrSideMode.BoosterMode;
+                return;
+            }
+        }
+    }
+
+    void ActivateParachute(List<FallDisruptor> Activate)
+    {
+         foreach (FallDisruptor active in Activate)
+        {
+            if (currsideMode == CurrSideMode.BoosterMode && active.disruptorType == FallDisruptor.DisruptorType.Parachute)
+            {
+                active.ParachuteMode();
+                currsideMode = CurrSideMode.ParachuteMode;
+                return;
+
+            }
+
+            if (currsideMode == CurrSideMode.ParachuteMode && active.disruptorType == FallDisruptor.DisruptorType.Booster)
+            {
+                active.BoosterMode();
+                currsideMode = CurrSideMode.BoosterMode;
+                return;
+            }
         }
     }
 

@@ -2254,6 +2254,10 @@ PrefabInstance:
       propertyPath: TopDisruptors.Array.data[2]
       value: 
       objectReference: {fileID: 2004913809}
+    - target: {fileID: 8884045378708774419, guid: 74b0ec50e195941a38ccd0d271c942d0, type: 3}
+      propertyPath: disruptorType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8905862221896927578, guid: 74b0ec50e195941a38ccd0d271c942d0, type: 3}
       propertyPath: m_Name
       value: ZigZagR
